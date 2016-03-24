@@ -1,19 +1,13 @@
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <direct.h>
 #include <string>
 #include <iostream>
 #include <windows.h>
-#include <process.h>
-#include <winuser.h>
-// make the macros work.
-void parseClicks(std::string yeah)
+
+//  macros. 
+void parseClicks(std::string yeah,std::string fontSize)
 {
     INPUT ip;
     INPUT sec;
     INPUT third;
-    INPUT fourth;
     // the different options you have.
     int choices[5] = { 0x42, 0x49, 0x55, 0x45, 0x10 };
     // Set up a generic keyboard event.
@@ -31,11 +25,6 @@ void parseClicks(std::string yeah)
     third.ki.wScan = 0;
     third.ki.time = 0;
     third.ki.dwExtraInfo = 0;
-
-    fourth.type = INPUT_KEYBOARD;
-    fourth.ki.wScan = 0;
-    fourth.ki.time = 0;
-    fourth.ki.dwExtraInfo = 0;
     for(unsigned int i = 0; i < 4; i++) {
         if(yeah[i] != '0') {
             // Press the key.
@@ -79,11 +68,40 @@ void parseClicks(std::string yeah)
         int x = toupper(yeah[i]);
         sec.ki.wVk = x;
         sec.ki.dwFlags = 0;
+        
         SendInput(1, &sec, sizeof(INPUT));
 
         sec.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &sec, sizeof(INPUT));
     }
+    sec.ki.wVk = 0x09;
+    sec.ki.dwFlags = 0;
+    SendInput(1,&sec,sizeof(INPUT));
+   
+    sec.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1,&sec,sizeof(INPUT));
+    
+    sec.ki.wVk = 0x09;
+    sec.ki.dwFlags = 0;
+    SendInput(1,&sec,sizeof(INPUT));
+   
+    sec.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1,&sec,sizeof(INPUT));
+    
+    sec.ki.wVk = (int)fontSize[0];
+    sec.ki.dwFlags= 0;
+    SendInput(1,&sec,sizeof(INPUT));
+    
+    sec.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1,&sec,sizeof(INPUT));
+    
+     sec.ki.wVk = (int)fontSize[1];
+    sec.ki.dwFlags= 0;
+    SendInput(1,&sec,sizeof(INPUT));
+    
+    sec.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1,&sec,sizeof(INPUT));
+    
     sec.ki.wVk = 0x0D;
     sec.ki.dwFlags = 0;
     SendInput(1,&sec,sizeof(INPUT));
@@ -99,9 +117,12 @@ int main(int argc, char** argv)
     std::getline(std::cin,directory);
     std:: cout << "Format:1 yes 0 no , and type font to use." <<std::endl;
     std::cout << "No spaces except for in font name. " <<std::endl;
-    std::cout << "five choices; 1. bold 2.italic. 3. underline 4. center text 5. change font " <<std::endl;
+    std::cout << "five choices; 1. bold 2.italic. 3. underline 4. center text 5. change font 6.change size of font." <<std::endl;
     std::string yeah;
     std::getline(std::cin, yeah);
+    std::cout << "Finally please specify font size" <<std::endl;
+    std::string size;
+    std::getline(std::cin, size);
     // Use shell to turn on  Windows Word!
     
     SHELLEXECUTEINFO sei = { 0 };
@@ -120,7 +141,7 @@ int main(int argc, char** argv)
             Sleep(500);
         }
         // use macros to set what the user wants.
-        parseClicks(yeah);
+        parseClicks(yeah,size);
     }
 
     return 1;

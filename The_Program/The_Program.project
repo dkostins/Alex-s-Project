@@ -92,5 +92,7 @@
   </Settings>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
+    <File Name="Parse.h"/>
+    <File Name="parse.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>
